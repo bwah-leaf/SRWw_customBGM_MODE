@@ -153,10 +153,10 @@ Container   : NWAV (tool-specific stream container)
 
 ```text
 SRW_W_BGM_Pack_Maker.exe
-fee62a224528c76af4fa849fdc2e3f636b5664e781d7e92b8f0ee6013690508d
+fb674762ff01d9914bc206e1b16fc6f834254d2a7ae3febd43fd59b58d693994
 
 SRW_W_BGM_ROM_Patcher.exe
-52984ce17e85fe0333359bb9bf7a8a6d20d28e6d29bececa660edfd39f8f6991
+acd529faccb4397df07048f1c3db01c2f8fc730fa162eb6da6540d9eca673a98
 ```
 
 파일을 다시 빌드하면 해시가 변경됩니다. GitHub Release에 표시된 버전별 체크섬을 우선 확인하세요.
