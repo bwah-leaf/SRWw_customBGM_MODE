@@ -43,19 +43,15 @@ Both applications are single-file Windows x64 executables. FFmpeg and devkitARM 
 ## Supported source ROM
 
 The current release supports only a source ROM that exactly matches this SHA-256 digest:
+translated kor patched ver.2.0.3
+
+https://blog.naver.com/dudaos1123/222622542237 <-- here
 
 ```text
 9cbeacfe4fdbeacd6b0ea070b2f2a583c04018f49a47f1e636d02614988c1287
 ```
 
 The following two filenames contain byte-for-byte identical ROM data and are both supported:
-
-```text
-0870 - Super Robot Taisen W (k).nds
-0870 - Super Robot Taisen W (kor)_2.0.3.nds
-```
-
-If either file is placed next to the ROM patcher, it is selected automatically; `_2.0.3.nds` takes priority when both are present. The filename is not a validation criterion—the actual content is identified by SHA-256.
 
 ROMs from another region or revision, modified dumps, and previously patched ROMs are not supported. Input files are never modified; all results are written separately to the selected output directory.
 
