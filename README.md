@@ -44,6 +44,10 @@ MP3 / WAV / FLAC / ...
 
 현재 버전은 아래 SHA-256과 정확히 일치하는 원본만 지원합니다.
 
+https://blog.naver.com/dudaos1123/222622542237
+
+건방진용자 님의 2.0.3버전에 대응합니다.
+
 ```text
 9cbeacfe4fdbeacd6b0ea070b2f2a583c04018f49a47f1e636d02614988c1287
 ```
