@@ -99,11 +99,13 @@ Container   : NWAV (tool-specific stream container)
 2. `찾기...`를 눌러 설치한 `ffmpeg.exe`를 지정합니다.
 3. 출력할 `.bgm.pak` 경로를 지정합니다.
 4. 목록에서 교체할 BGM ID를 선택합니다.
-5. `선택 ID부터 음원 지정`을 눌러 음원을 배정합니다.
+5. `선택 ID부터 음원 지정`을 눌러 음원을 배정합니다. 여러 파일은 파일명 속 숫자를 인식하는 자연 정렬(`2` 다음 `10`)로 배치되며, 적용 전에 `BGM ID ← 파일명` 목록이 표시됩니다.
 6. 필요한 ID가 채워질 때까지 4~5번을 반복합니다.
 7. 재생시간 합계가 한도 이내인지 확인하고 `BGM.PAK 만들기`를 누릅니다.
 
-`.bgm.pak`에는 BGM ID, 변환 데이터, 크기 및 무결성 정보가 저장됩니다. 원본 음원의 경로와 파일명은 저장하지 않습니다.
+음원 시간 확인은 전체 파일이 모두 성공한 뒤에만 목록에 반영됩니다. 중간 파일이 손상되었거나 지원되지 않아도 앞부분만 잘못 남지 않습니다.
+
+`.bgm.pak`에는 BGM ID, 변환 데이터, 크기 및 무결성 정보가 저장됩니다. 개인 경로는 PAK에 저장하지 않습니다. 같은 위치에 생성되는 `.bgm.pak.manifest.json`에는 사용자가 배치를 검토할 수 있도록 ID, 게임 곡명과 원본 파일명만 기록됩니다.
 
 ## 2. NDS ROM 패치 만들기
 
@@ -114,9 +116,11 @@ Container   : NWAV (tool-specific stream container)
 1. [devkitPro](https://devkitpro.org/wiki/Getting_Started)를 통해 devkitARM을 설치합니다.
 2. `SRW_W_BGM_ROM_Patcher.exe`를 실행합니다.
 3. SHA-256이 일치하는 원본 `.nds`를 지정합니다.
-4. `SRW_W_BGM_Pack_Maker`에서 만든 `.bgm.pak`을 지정합니다.
+4. `SRW_W_BGM_Pack_Maker`에서 만든 `.bgm.pak`을 지정합니다. 마지막으로 생성한 PAK은 두 EXE가 다른 폴더에 있어도 자동으로 선택됩니다.
 5. 출력 폴더와 devkitARM 설치 폴더를 지정합니다.
 6. `ROM 패치 만들기`를 누릅니다.
+
+패치 전에 `검증됨` 표시의 곡 수와 포함 ID를 확인할 수 있으며, `PAK 배치 내용 보기`에서 각 ID에 연결된 파일명을 다시 검토할 수 있습니다.
 
 ### 출력 파일
 
@@ -125,6 +129,7 @@ Container   : NWAV (tool-specific stream container)
 | `... [Custom STRM BGM].nds` | 즉시 실행할 수 있는 패치 완료 ROM |
 | `... [Custom STRM BGM].bps` | 원본 ROM에 적용할 수 있는 BPS 패치. 커스텀 BGM 데이터 포함 |
 | `build_manifest.json` | 원본·결과물 해시, 크기, 훅 주소 및 삽입 음원 정보 |
+| `*.bgm.pak.manifest.json` | PAK 생성 시 기록되는 ID·곡명·파일명 검토용 보조 문서. ROM 패치 자체에는 없어도 됨 |
 
 실제 플레이에는 패치된 `.nds`만 있으면 됩니다. `.bps`가 있다면 정확히 일치하는 원본 ROM과 BPS 적용 프로그램을 사용하여 동일한 패치 ROM을 다시 만들 수 있으며, 이때 `.bgm.pak`, FFmpeg와 devkitARM은 필요하지 않습니다.
 
@@ -153,14 +158,14 @@ Container   : NWAV (tool-specific stream container)
 
 ## 배포 파일 무결성
 
-현재 v2.1.1 빌드의 SHA-256입니다.
+현재 v2.2.0 빌드의 SHA-256입니다.
 
 ```text
 SRW_W_BGM_Pack_Maker.exe
-fb674762ff01d9914bc206e1b16fc6f834254d2a7ae3febd43fd59b58d693994
+4ff66e8353cbaa69e5bad4e0c0ef86d1c062eb266de0ac0abfd47b2d42f140d3
 
 SRW_W_BGM_ROM_Patcher.exe
-acd529faccb4397df07048f1c3db01c2f8fc730fa162eb6da6540d9eca673a98
+926ab2d469b0dc778e51226391630f266ee20fc02f433a2aae32a6afd9c2a58d
 ```
 
 파일을 다시 빌드하면 해시가 변경됩니다. GitHub Release에 표시된 버전별 체크섬을 우선 확인하세요.
