@@ -100,11 +100,13 @@ The application probes every selected track and displays the combined duration o
 2. Click `Browse...` and select the installed `ffmpeg.exe`.
 3. Select the output `.bgm.pak` path.
 4. Select the BGM ID to replace.
-5. Click `Assign audio from selected ID` and choose the audio files.
+5. Click `Assign audio from selected ID` and choose the audio files. Multiple files are placed using natural numeric filename order (`2` before `10`), and an `BGM ID <- filename` preview is shown before assignment.
 6. Repeat steps 4–5 until all desired IDs have been assigned.
 7. Confirm that the combined duration is within the limit, then click `Create BGM.PAK`.
 
-The package stores the BGM IDs, converted stream data, sizes, and integrity metadata. Original source paths and filenames are not stored.
+The list is updated only after every selected file passes duration probing. A bad or unsupported file therefore cannot leave a partially assigned ID range.
+
+The package stores BGM IDs, converted stream data, sizes, and integrity metadata; private source paths are not stored in it. The adjacent `.bgm.pak.manifest.json` records only IDs, game titles, and source filenames so the mapping can be reviewed.
 
 ## 2. Creating the NDS ROM patch
 
@@ -115,9 +117,11 @@ The package stores the BGM IDs, converted stream data, sizes, and integrity meta
 1. Install devkitARM through [devkitPro](https://devkitpro.org/wiki/Getting_Started).
 2. Run `SRW_W_BGM_ROM_Patcher.exe`.
 3. Select the source `.nds` matching the supported SHA-256 digest.
-4. Select the `.bgm.pak` created by `SRW_W_BGM_Pack_Maker`.
+4. Select the `.bgm.pak` created by `SRW_W_BGM_Pack_Maker`. The most recently created package is selected automatically even when the two executables are kept in different folders.
 5. Select the output directory and devkitARM installation directory.
 6. Click `Create ROM patch`.
+
+Before patching, the verified track count and included IDs are displayed. Use `View PAK mapping` to review the filename assigned to every ID.
 
 ### Output files
 
@@ -126,6 +130,7 @@ The package stores the BGM IDs, converted stream data, sizes, and integrity meta
 | `... [Custom STRM BGM].nds` | Ready-to-run patched ROM |
 | `... [Custom STRM BGM].bps` | BPS patch for the exact source ROM; includes the custom BGM difference data |
 | `build_manifest.json` | Source/output hashes, sizes, hook addresses, and inserted stream metadata |
+| `*.bgm.pak.manifest.json` | Optional review document containing the package ID/title/filename mapping; not required to patch the ROM |
 
 Only the patched `.nds` is needed for normal play. Given the `.bps`, an exact matching source ROM, and a BPS patching utility, the same patched ROM can be reconstructed without the `.bgm.pak`, FFmpeg, or devkitARM.
 
@@ -154,14 +159,14 @@ Playback behavior may vary depending on emulator version, audio synchronization,
 
 ## Release integrity
 
-SHA-256 digests for the current v2.1.1 build:
+SHA-256 digests for the current v2.2.0 build:
 
 ```text
 SRW_W_BGM_Pack_Maker.exe
-fb674762ff01d9914bc206e1b16fc6f834254d2a7ae3febd43fd59b58d693994
+4ff66e8353cbaa69e5bad4e0c0ef86d1c062eb266de0ac0abfd47b2d42f140d3
 
 SRW_W_BGM_ROM_Patcher.exe
-acd529faccb4397df07048f1c3db01c2f8fc730fa162eb6da6540d9eca673a98
+926ab2d469b0dc778e51226391630f266ee20fc02f433a2aae32a6afd9c2a58d
 ```
 
 Rebuilding the executables changes their hashes. Prefer the checksums published with the corresponding GitHub Release.
