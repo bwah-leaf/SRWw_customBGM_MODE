@@ -14,7 +14,7 @@ MP3 / WAV / FLAC / ...
           ▼
 ┌──────────────────────────────┐
 │ SRW_W_BGM_Pack_Maker.exe     │  + FFmpeg
-│ 22.05 kHz / Mono / PCM16     │
+│ 22.05 kHz / Mono·Stereo PCM16│
 └──────────────┬───────────────┘
                │
                ▼
@@ -75,24 +75,24 @@ The file picker recognizes the following formats:
 
 FFmpeg performs the actual decoding. A format not listed above may still be selected through `All files (*.*)` if the installed FFmpeg build can decode it. DRM-protected media is not supported.
 
-Every source track is normalized to the following internal format:
+Every source track is normalized to the following internal format. Channel mode can be selected independently for each track.
 
 ```text
 Sample rate : 22,050 Hz
-Channels    : Mono
+Channels    : Mono or Stereo (per-track selection)
 Sample type : Signed PCM 16-bit little-endian
 Container   : NWAV (tool-specific stream container)
 ```
 
 ### Maximum combined duration
 
-The conservative combined limit, calculated from the verified source ROM size, the 512 MiB NDS ROM limit, stream alignment overhead, and the `22.05 kHz / Mono / PCM16` format, is:
+The conservative **mono-equivalent** limit, calculated from the verified source ROM size, the 512 MiB NDS ROM limit, stream alignment overhead, and the `22.05 kHz / Mono / PCM16` format, is:
 
 ```text
 02:58:09
 ```
 
-The application probes every selected track and displays the combined duration on a progress bar. The `Create BGM.PAK` button is automatically disabled when the total exceeds the limit. The backend also rejects a package if the converted stream layout would exceed the ROM capacity.
+The application displays both the actual combined track duration and the channel-weighted capacity usage. One second of stereo consumes the same space as two seconds of mono. The `Create BGM.PAK` button is automatically disabled when the weighted total exceeds the limit. The backend also rejects a package if the converted stream layout would exceed the ROM capacity.
 
 ### Procedure
 
@@ -100,9 +100,10 @@ The application probes every selected track and displays the combined duration o
 2. Click `Browse...` and select the installed `ffmpeg.exe`.
 3. Select the output `.bgm.pak` path.
 4. Select the BGM ID to replace.
-5. Click `Assign audio from selected ID` and choose the audio files. Multiple files are placed using natural numeric filename order (`2` before `10`), and an `BGM ID <- filename` preview is shown before assignment.
-6. Repeat steps 4–5 until all desired IDs have been assigned.
-7. Confirm that the combined duration is within the limit, then click `Create BGM.PAK`.
+5. Choose Mono or Stereo under `Conversion`, click `Assign audio from selected ID`, and choose the audio files. Multiple files are placed using natural numeric filename order (`2` before `10`), and a `BGM ID <- filename` preview is shown before assignment.
+6. To change already assigned tracks, select their rows and click `Apply to selected tracks`. Multiple rows may be changed at once.
+7. Repeat steps 4–6 until all desired IDs have been assigned.
+8. Confirm that the channel-weighted usage is within the limit, then click `Create BGM.PAK`.
 
 The list is updated only after every selected file passes duration probing. A bad or unsupported file therefore cannot leave a partially assigned ID range.
 
@@ -159,14 +160,14 @@ Playback behavior may vary depending on emulator version, audio synchronization,
 
 ## Release integrity
 
-SHA-256 digests for the current v2.2.0 build:
+SHA-256 digests for the current v2.3.0 build:
 
 ```text
 SRW_W_BGM_Pack_Maker.exe
-4ff66e8353cbaa69e5bad4e0c0ef86d1c062eb266de0ac0abfd47b2d42f140d3
+99dcc00739bfd6ac434305b55e086e050a77e16c452a5a13b34d1cc683bbf027
 
 SRW_W_BGM_ROM_Patcher.exe
-926ab2d469b0dc778e51226391630f266ee20fc02f433a2aae32a6afd9c2a58d
+3c5b5134c2b743b0541f1937982af513fb78cc14f05176a0140e8d33fe615eb9
 ```
 
 Rebuilding the executables changes their hashes. Prefer the checksums published with the corresponding GitHub Release.
